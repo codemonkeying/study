@@ -44,7 +44,7 @@ study --lint             # check every bank
 
 Included:
 - `netplus`: 907 questions incl. PBQs, timed mock, subnet drill
-- `secplus`: 633 questions incl. PBQs, timed mock
+- `secplus`: 639 questions incl. PBQs, timed mock
 - `techplus`: 479 questions (multiple choice, like the real exam), timed mock
 
 Your own go in `banks/<name>/` in your data repo:
