@@ -199,7 +199,8 @@ def _load_exams():
 EXAMS = _load_exams()
 MOCK = {b: c for b, c in EXAMS.items()
         if isinstance(c.get("n"), int) and isinstance(c.get("mins"), (int, float))
-        and isinstance(c.get("pass"), int) and isinstance(c.get("weights"), dict)}
+        and isinstance(c.get("pass"), int) and isinstance(c.get("weights"), dict) and c["weights"]
+        and type(c.get("n")) is int and c["n"] > 0}
 for _c in MOCK.values():
     _c.setdefault("pbq", 0)
 ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
@@ -2476,18 +2477,47 @@ def cmd_init(args):
         rc, _ = _git(["remote", "add", "origin", url])
         if rc != 0:
             rc, _ = _git(["remote", "set-url", "origin", url])
-        if rc == 0:
-            _git(["push", "-u", "origin", "HEAD"])
+        if rc != 0:
+            return rc
+        _, br = _git(["symbolic-ref", "--short", "HEAD"], capture=True)
+        br = br.strip() or "main"
+        if _git(["fetch", "-q", "origin"])[0] == 0 and \
+                _git(["rev-parse", "-q", "--verify", f"origin/{br}"], capture=True)[0] == 0:
+            rc, _ = _git(["pull", "--rebase", "--allow-unrelated-histories", "origin", br])
+            if rc != 0:
+                print(f"{RED}could not merge with {url} (rc {rc}){RST}")
+                return rc
+        rc, _ = _git(["push", "-u", "origin", br])
         return rc
-    if url:
+    # inside an existing repo (DATA is a new subfolder of it): just make the folder
+    up = DATA
+    while up and not os.path.isdir(up):
+        up = os.path.dirname(up)
+    inside = subprocess.run(["git", "rev-parse", "--is-inside-work-tree"], cwd=up or "/",
+                            capture_output=True, text=True).stdout.strip() == "true"
+    if inside and not url:
+        for d in ("banks", "results"):
+            os.makedirs(os.path.join(DATA, d), exist_ok=True)
+            open(os.path.join(DATA, d, ".keep"), "a").close()
+        print(f"{GRY}{DATA} is inside an existing git repo; using that repo{RST}")
+    elif url:
         rc = subprocess.run(["git", "clone", url, DATA]).returncode
         if rc != 0:
             return rc
+        # remote HEAD may point at a branch that doesn't exist (e.g. bare repo
+        # defaulting to master while data was pushed to main): track what's there
+        if _git(["rev-parse", "-q", "--verify", "HEAD"], capture=True)[0] != 0:
+            _, out = _git(["branch", "-r", "--format=%(refname:short)"], capture=True)
+            rb = [b for b in out.split() if b != "origin/HEAD" and "/" in b]
+            pick = "origin/main" if "origin/main" in rb else (rb[0] if rb else "")
+            if pick:
+                _git(["checkout", "-q", "-B", pick.split("/", 1)[1], "--track", pick])
     else:
         os.makedirs(os.path.join(DATA, "banks"), exist_ok=True)
         os.makedirs(os.path.join(DATA, "results"), exist_ok=True)
         subprocess.run(["git", "init", "-q", DATA])
-        _git(["symbolic-ref", "HEAD", "refs/heads/main"])
+        _git(["symbolic-ref", "HEAD", "refs/heads/main"])   # works on git < 2.28 too
+        _git(["config", "init.defaultBranch", "main"])
         open(os.path.join(DATA, "banks", ".keep"), "a").close()
         open(os.path.join(DATA, "results", ".keep"), "a").close()
         _git(["add", "-A"])
@@ -2552,6 +2582,7 @@ def cmd_sync(pull_code=False):
         else:
             print(f"{GRY}no local changes to commit{RST}")
     # private banks: commit changes under banks/ too, but only if every bank lints clean
+    held = 0
     _, ch = _git(["status", "--porcelain", "--", "banks"], capture=True)
     if ch.strip():
         import contextlib, io
@@ -2559,6 +2590,7 @@ def cmd_sync(pull_code=False):
             bad = lint()
         if bad:
             print(f"{YEL}bank changes NOT pushed: lint failed (run study --lint){RST}")
+            held = 1
         else:
             _git(["add", "-A", "--", "banks"])
             rc, _ = _git(["commit", "-q", "-m", f"banks: update from {DEVICE}", "--", "banks"])
@@ -2568,7 +2600,7 @@ def cmd_sync(pull_code=False):
     # never overlap, so replaying ours on top is always clean.
     if not _has_remote():
         print(f"{GRY}no remote set: records committed locally (study init URL to add one){RST}")
-        return 0
+        return held
     rc, _ = _git(["pull", "--rebase", "--autostash"])
     if rc != 0:
         print(f"{RED}pull failed (rc {rc}) - resolve by hand, then re-run.{RST}")
@@ -2576,6 +2608,7 @@ def cmd_sync(pull_code=False):
     rc, _ = _git(["push", "origin", "HEAD"])
     if rc == 0:
         print(f"{GRN}✓ synced - records pushed + pulled{RST}")
+        rc = held
     else:
         print(f"{RED}push failed (rc {rc}){RST}")
     return rc
@@ -2748,7 +2781,7 @@ def main():
             sys.exit(f"usage: study build BANK  (needs {BANKS_DIR}/BANK/drafts/*.txt)")
         rc = subprocess.run([sys.executable, os.path.join(HERE, "tools", "build.py"), args[1], DATA,
                              bank_dir(args[1])]).returncode
-        sys.exit(rc or lint())
+        sys.exit(rc if rc else (1 if lint() else 0))
     if args and args[0] == "init":
         sys.exit(cmd_init(args[1:]))
     if args and args[0] in ("sync", "update"):

@@ -75,7 +75,13 @@ def build(bank, data, d=None):
     src = re.sub(r"^## Test \d+ - (.*)$", hdr, src, flags=re.M)
     path = os.path.join(d, "tests.md")
     old = study.parse_bank(path) if os.path.exists(path) else {}
-    open(path, "w", encoding="utf-8").write(render(src))
+    try:
+        out = render(src)
+    except AssertionError as e:
+        sys.exit(f"build failed, tests.md untouched: {e}")
+    tmp = path + ".tmp"
+    open(tmp, "w", encoding="utf-8").write(out)
+    os.replace(tmp, path)
     new = study.parse_bank(path)
     remap = {}
     for t in old:
