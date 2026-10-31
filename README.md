@@ -1,6 +1,6 @@
 # study
 
-A terminal quiz engine for cert study. Comes with a Network+ (N10-009) bank; add your own. Your progress syncs across machines (phone included, via Termux) through a git repo you choose: GitHub, Gitea, anything.
+A terminal quiz engine for cert study. Comes with Network+ (N10-009), Security+ (SY0-701) and Tech+ (FC0-U71) banks; add your own. Your progress syncs across machines (phone included, via Termux) through a git repo you choose: GitHub, Gitea, anything.
 
 ## Install
 
@@ -42,7 +42,10 @@ study --lint             # check every bank
 
 ## Banks
 
-Included: `netplus` (907 questions incl. PBQs, timed mock, subnet drill).
+Included:
+- `netplus`: 907 questions incl. PBQs, timed mock, subnet drill
+- `secplus`: 633 questions incl. PBQs, timed mock
+- `techplus`: 479 questions (multiple choice, like the real exam), timed mock
 
 Your own go in `banks/<name>/` in your data repo:
 

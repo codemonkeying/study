@@ -4,6 +4,8 @@ __pycache__/
 # banks are private until released: un-ignore each one when it's ready
 banks/*
 !banks/netplus/
+!banks/secplus/
+!banks/techplus/
 # never ship these, even in a released bank
 banks/*/drafts/
 banks/*/objectives.md
