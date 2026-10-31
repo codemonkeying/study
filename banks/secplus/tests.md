@@ -84,15 +84,15 @@
    - *The PEP enforces in the traffic path, so it lives in the data plane with the subject and the implicit trust zone. Engine and administrator make and push decisions, so they form the control plane. Hook: control plane thinks, data plane carries.*
    - @1.2.zt
 20. PBQ 1.1 - Controls matrix. A logistics firm lists new controls. Pick the CATEGORY, then the TYPE that best fits each control's main purpose. ¶  1  Data-loss prevention rule blocking card numbers in outbound email ¶  2  Policy requiring visitors to be escorted at all times ¶  3  Guard checks the CCTV monitors and radios in anything odd ¶  4  Locked gate on the fuel depot ¶  5  Restoring the dispatch database from snapshot after corruption
-   - [p] Control 1 category :: A Technical · B Managerial · C Operational · D Physical = a
-   - [p] Control 1 type :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = a
-   - [p] Control 2 category :: A Technical · B Managerial · C Operational · D Physical = b
-   - [p] Control 2 type :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = f
-   - [p] Control 3 category :: A Technical · B Managerial · C Operational · D Physical = c
-   - [p] Control 3 type :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = c
-   - [p] Control 4 category :: A Technical · B Managerial · C Operational · D Physical = d
-   - [p] Control 4 type :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = a
-   - [p] Control 5 type :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = d
+   - [p] Control 1 (Data-loss prevention rule blocking card numbers in outbound email): CATEGORY :: A Technical · B Managerial · C Operational · D Physical = a
+   - [p] Control 1 (Data-loss prevention rule blocking card numbers in outbound email): TYPE :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = a
+   - [p] Control 2 (Policy requiring visitors to be escorted at all times): CATEGORY :: A Technical · B Managerial · C Operational · D Physical = b
+   - [p] Control 2 (Policy requiring visitors to be escorted at all times): TYPE :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = f
+   - [p] Control 3 (Guard checks the CCTV monitors and radios in anything odd): CATEGORY :: A Technical · B Managerial · C Operational · D Physical = c
+   - [p] Control 3 (Guard checks the CCTV monitors and radios in anything odd): TYPE :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = c
+   - [p] Control 4 (Locked gate on the fuel depot): CATEGORY :: A Technical · B Managerial · C Operational · D Physical = d
+   - [p] Control 4 (Locked gate on the fuel depot): TYPE :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = a
+   - [p] Control 5 (Restoring the dispatch database from snapshot after corruption): TYPE :: A Preventive · B Deterrent · C Detective · D Corrective · E Compensating · F Directive = d
    - *1: DLP is enforced by a system and stops the email, so technical/preventive. 2: a written rule is managerial and tells people what to do, so directive. 3: a person watching screens is operational and notices events, so detective. 4: a gate is physical and blocks entry, so preventive. 5: restoring after damage is corrective. Hook: paper = managerial, people = operational, systems = technical, touchable = physical.*
    - @1.1.type
 
@@ -176,11 +176,11 @@
    - *Impact analysis and test results feed the approval decision, so they come before it. Implementation follows approval, and documentation (including version control and updated diagrams) closes it out. Trap: analysing impact after the change is a post-mortem, not a control.*
    - @1.3.proc
 17. PBQ 1.4 - Physical security for a new branch. Pick the best control for each spot. ¶  Spot 1  Glass storefront next to a busy road ¶  Spot 2  Staff entrance where people hold the door for whoever is behind them ¶  Spot 3  Cash room where you must know exactly who entered and when ¶  Spot 4  Unstaffed back office that should alert on motion at night, mounted high on the ceiling ¶  Spot 5  Poorly lit rear alley used by staff at closing time
-   - [p] Spot 1 :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = a
-   - [p] Spot 2 :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = b
-   - [p] Spot 3 :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = c
-   - [p] Spot 4 :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = d
-   - [p] Spot 5 :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = e
+   - [p] Spot 1 (Glass storefront next to a busy road) :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = a
+   - [p] Spot 2 (Staff entrance where people hold the door for whoever is behind them) :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = b
+   - [p] Spot 3 (Cash room where you must know exactly who entered and when) :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = c
+   - [p] Spot 4 (Unstaffed back office that should alert on motion at night,...) :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = d
+   - [p] Spot 5 (Poorly lit rear alley used by staff at closing time) :: A Bollards · B Access control vestibule · C Access badge · D Ultrasonic sensor · E Lighting · F Honeypot = e
    - [p] Spot 6, a recorded view of everyone at the cash room door for later review :: A Video surveillance · B Bollards · C Fencing · D Honeyfile = a
    - [p] Spot 7, a dark stockroom corridor that should alert on a warm body :: A Infrared sensor · B Pressure sensor · C Microwave sensor · D Ultrasonic sensor = a
    - [p] Spot 8, the floor directly in front of the safe, alert only when stepped on :: A Infrared sensor · B Pressure sensor · C Microwave sensor · D Ultrasonic sensor = b
@@ -1293,11 +1293,11 @@
     - *Selecting effective controls means matching the control to the actual gap: content inside allowed traffic needs deep inspection. More layer 4 filtering sees the same ports. A jump server and a tap do not inspect or block web content.*
     - @3.2.select
 25. PBQ 3.2 - Network design. A clinic is building a new site. Choose the BEST control for each need. ¶  1  Stop unknown devices joining via wall ports ¶  2  Block XSS against the patient portal ¶  3  Admins reach the server zone through one monitored host ¶  4  Watch internal traffic without risk of dropping packets ¶  5  Encrypted link to head office, whole packet protected
-    - [p] Need 1 :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = a
-    - [p] Need 2 :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = b
-    - [p] Need 3 :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = c
-    - [p] Need 4 :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = d
-    - [p] Need 5 :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = e
+    - [p] Need 1 (Stop unknown devices joining via wall ports) :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = a
+    - [p] Need 2 (Block XSS against the patient portal) :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = b
+    - [p] Need 3 (Admins reach the server zone through one monitored host) :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = c
+    - [p] Need 4 (Watch internal traffic without risk of dropping packets) :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = d
+    - [p] Need 5 (Encrypted link to head office, whole packet protected) :: A 802.1X · B WAF · C Jump server · D IDS on a tap · E IPSec tunnel mode = e
     - *1: port-based NAC. 2: layer 7 app inspection. 3: single hardened admin entry. 4: passive monitoring sees copies only. 5: tunnel mode wraps the whole packet. Hook: door, letter-reader, drawbridge, CCTV, armoured van.*
     - @3.2.select
 
@@ -1396,11 +1396,11 @@
     - *Private (also restricted, classified or internal use only) = not for outsiders; staff may need extra rights or an NDA. Confidential is more sensitive, viewable only with specifically granted access, which does not fit a whole sales force. Public needs no protection. Critical is about availability, not secrecy.*
     - @3.3.class
 24. PBQ 3.3 - Pick the protection. A health insurer reviews data flows. Choose the BEST method for each. ¶  1  Agents see only the last four digits of member IDs ¶  2  Card numbers replaced with vault-mapped stand-ins ¶  3  Verify archived claim files were not modified ¶  4  Laptops unreadable if stolen ¶  5  Block logins from outside approved countries
-    - [p] Need 1 :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = a
-    - [p] Need 2 :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = b
-    - [p] Need 3 :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = c
-    - [p] Need 4 :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = d
-    - [p] Need 5 :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = e
+    - [p] Need 1 (Agents see only the last four digits of member IDs) :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = a
+    - [p] Need 2 (Card numbers replaced with vault-mapped stand-ins) :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = b
+    - [p] Need 3 (Verify archived claim files were not modified) :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = c
+    - [p] Need 4 (Laptops unreadable if stolen) :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = d
+    - [p] Need 5 (Block logins from outside approved countries) :: A Masking · B Tokenization · C Hashing · D Encryption · E Geographic restrictions = e
     - *1: partial display = masking. 2: random stand-in with lookup = tokenization. 3: integrity check = hashing. 4: unreadable without key = encryption. 5: location-based access = geographic restrictions. Hook: hide, swap, fingerprint, lock, fence.*
     - @3.3.meth
 
@@ -1499,11 +1499,11 @@
     - *Warm site = equipment in place, data and configuration still to load; hours to a day or so. Hot is live with current data. Cold is space and power only. Multi-cloud is spreading across providers, not a recovery facility.*
     - @3.4.site
 24. PBQ 3.4 - Resilience plan. A regional insurer is upgrading resilience. Choose the BEST fit for each need. ¶  1  Back online within minutes after losing HQ ¶  2  Keep servers up for the 30 seconds before the generator starts ¶  3  Spread transactions over many CPUs so losing one does not stop processing ¶  4  Roll back a VM quickly after a bad patch ¶  5  Survive a provider-wide cloud outage
-    - [p] Need 1 :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = a
-    - [p] Need 2 :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = b
-    - [p] Need 3 :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = c
-    - [p] Need 4 :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = d
-    - [p] Need 5 :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = e
+    - [p] Need 1 (Back online within minutes after losing HQ) :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = a
+    - [p] Need 2 (Keep servers up for the 30 seconds before the generator starts) :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = b
+    - [p] Need 3 (Spread transactions over many CPUs so losing one does not stop...) :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = c
+    - [p] Need 4 (Roll back a VM quickly after a bad patch) :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = d
+    - [p] Need 5 (Survive a provider-wide cloud outage) :: A Hot site · B UPS · C Parallel processing · D Snapshot · E Multi-cloud = e
     - *1: minutes to recover = hot site. 2: instant bridge power = UPS. 3: work spread across processors, survivors carry on = parallel processing. 4: point-in-time VM copy = snapshot. 5: avoid one provider = multi-cloud. Hook: ready room, battery, many hands, photo, second landlord.*
     - @3.4.res
 
@@ -2420,19 +2420,19 @@
    - *Many countries at once = global. One country = national. A state or city = local/regional. Industry considerations come from sector bodies, like PCI DSS for card data.*
    - @5.1.gov
 27. PBQ 5.1 - Governance documents. Classify each item. ¶  1  "Leadership commits to safeguarding customer trust and assigns security duties to every manager" ¶  2  "Public web services accept TLS 1.2 or newer, nothing older" ¶  3  "For a new hire: 1) create directory account, 2) add role groups, 3) issue laptop, 4) enrol MFA" ¶  4  "It is a good idea to keep a privacy screen on your laptop when travelling"
-   - [p] Item 1 :: A Policy · B Standard · C Procedure · D Guideline = a
-   - [p] Item 2 :: A Policy · B Standard · C Procedure · D Guideline = b
-   - [p] Item 3 :: A Policy · B Standard · C Procedure · D Guideline = c
-   - [p] Item 4 :: A Policy · B Standard · C Procedure · D Guideline = d
+   - [p] Item 1 (Leadership commits to safeguarding customer trust and assigns...) :: A Policy · B Standard · C Procedure · D Guideline = a
+   - [p] Item 2 (Public web services accept TLS 1.2 or newer, nothing older) :: A Policy · B Standard · C Procedure · D Guideline = b
+   - [p] Item 3 (For a new hire: 1) create directory account, 2) add role groups,...) :: A Policy · B Standard · C Procedure · D Guideline = c
+   - [p] Item 4 (It is a good idea to keep a privacy screen on your laptop when...) :: A Policy · B Standard · C Procedure · D Guideline = d
    - *1: high-level intent, so policy. 2: a specific mandatory value, so standard. 3: ordered steps, so procedure (onboarding). 4: "a good idea" = optional, so guideline. Hook: policy = why, standard = how much, procedure = how, guideline = suggestion.*
    - @5.1.std
 
 28. PBQ 5.1 - Data roles at a clinic that uses a cloud billing provider. Pick each role. ¶  1  A patient who asks what billing data is held about him ¶  2  The billing provider, which may only run invoices the clinic requests ¶  3  The practice manager, the senior person ultimately responsible for all billing records ¶  4  The clinic as an organisation, which chose to collect insurance details and for what ¶  5  The sysadmin who configures nightly backups and share permissions
-   - [p] Party 1 :: A Data subject · B Processor · C Custodian · D Controller · E Owner = a
-   - [p] Party 2 :: A Data subject · B Processor · C Custodian · D Controller · E Owner = b
-   - [p] Party 3 :: A Data subject · B Processor · C Custodian · D Controller · E Owner = e
-   - [p] Party 4 :: A Data subject · B Processor · C Custodian · D Controller · E Owner = d
-   - [p] Party 5 :: A Data subject · B Processor · C Custodian · D Controller · E Owner = c
+   - [p] Party 1 (A patient who asks what billing data is held about him) :: A Data subject · B Processor · C Custodian · D Controller · E Owner = a
+   - [p] Party 2 (The billing provider, which may only run invoices the clinic requests) :: A Data subject · B Processor · C Custodian · D Controller · E Owner = b
+   - [p] Party 3 (The practice manager, the senior person ultimately responsible for...) :: A Data subject · B Processor · C Custodian · D Controller · E Owner = e
+   - [p] Party 4 (The clinic as an organisation, which chose to collect insurance...) :: A Data subject · B Processor · C Custodian · D Controller · E Owner = d
+   - [p] Party 5 (The sysadmin who configures nightly backups and share permissions) :: A Data subject · B Processor · C Custodian · D Controller · E Owner = c
    - *1: the person the data is about, so data subject. 2: acts only on instructions, so processor. 3: senior and ultimately responsible, so owner. 4: decides purpose and means, so controller. 5: implements technical care, so custodian.*
    - @5.1.roles
 
@@ -2661,12 +2661,12 @@
 - **SLA = service levels; MOA/MOU = intent (MOA more formal); MSA = master terms; SOW/WO = specific job; NDA = secrecy; BPA = partnership.**
 - **Then: vendor monitoring, questionnaires, rules of engagement.**
 24. PBQ 5.3 - Agreements. Pick the document for each need. ¶  1  Uptime and response times with penalties ¶  2  Keep shared designs confidential ¶  3  Overall terms for many future projects ¶  4  Tasks, deliverables and deadlines for one project ¶  5  Non-binding statement of shared goals ¶  6  How partners split profits and duties
-   - [p] Need 1 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = a
-   - [p] Need 2 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = b
-   - [p] Need 3 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = c
-   - [p] Need 4 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = d
-   - [p] Need 5 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = e
-   - [p] Need 6 :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = f
+   - [p] Need 1 (Uptime and response times with penalties) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = a
+   - [p] Need 2 (Keep shared designs confidential) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = b
+   - [p] Need 3 (Overall terms for many future projects) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = c
+   - [p] Need 4 (Tasks, deliverables and deadlines for one project) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = d
+   - [p] Need 5 (Non-binding statement of shared goals) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = e
+   - [p] Need 6 (How partners split profits and duties) :: A SLA · B NDA · C MSA · D SOW · E MOU · F BPA = f
    - *1: SLA = service levels. 2: NDA = secrecy. 3: MSA = master terms. 4: SOW = one job. 5: MOU = intent. 6: BPA = partnership. Hook: service, secret, master, work, understanding, partners.*
    - @5.3.agree
 
