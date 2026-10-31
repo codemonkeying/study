@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+
+# banks are private until released: un-ignore each one when it's ready
+banks/*
+!banks/netplus/
+# never ship these, even in a released bank
+banks/*/drafts/
+banks/*/objectives.md
+banks/*/scratch.md
