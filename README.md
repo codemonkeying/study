@@ -8,8 +8,13 @@ Needs Python 3.8+ and git (Linux, macOS, Termux).
 
 ```sh
 git clone https://github.com/codemonkeying/study.git ~/study && ~/study/install.sh
+study netplus 1          # try it: no setup needed
+```
+
+`install.sh` links `study` into `~/.local/bin`; make sure that's on your PATH. To keep and sync your results, set up a data repo:
+
+```sh
 study init                       # new local data repo
-# install.sh links into ~/.local/bin; make sure that's on your PATH
 study init git@host:you/data.git # or clone your existing one
 ```
 
@@ -25,25 +30,38 @@ auto_update = true              # engine checks for updates once a day
 
 ## Use
 
+```
+Q7/20. An IPS sits inline and drops a malicious packet. What control TYPE is it?
+   A) Detective
+   B) Preventive
+   C) Corrective
+   D) Deterrent
+> b
+   ✓
+```
+
 ```sh
 study                    # menu
 study netplus 3          # run test 3
 study mybank weak        # drill weak spots until cleared
 study mybank new         # unseen questions only
 study mybank practice_exam   # timed, domain-weighted mock (needs exam.json)
+study mybank history     # past runs + weak spots
 study subnet             # subnetting drill (hard, history)
-study ref mybank         # print the bank's ref.md
+study ref mybank         # print the bank's ref.md (obj = objectives, if the bank has them)
+study set                # this device's settings, e.g. study set end_summary off
 study flags              # questions you flagged with /flag
 study build mybank       # compile drafts into tests.md, then lint
 study sync               # push your results + bank changes (if lint passes), pull the rest
 study update             # pull engine + data
 study --lint             # check every bank
+study --version
 ```
 
 ## Banks
 
 Included:
-- `netplus`: 907 questions incl. PBQs, timed mock, subnet drill
+- `netplus`: 907 questions incl. PBQs (performance-based questions: multi-part scenarios, like the real exam), timed mock, subnet drill
 - `secplus`: 639 questions incl. PBQs, timed mock
 - `techplus`: 479 questions (multiple choice, like the real exam), timed mock
 
