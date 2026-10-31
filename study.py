@@ -2470,6 +2470,7 @@ def cmd_init(args):
     (GitHub, Gitea, any git remote); no URL = new local repo, add a remote later
     with `study init URL`."""
     url = args[0] if args else ""
+    ok = True
     if _in_repo():
         if not url:
             print(f"data repo already at {DATA}")
@@ -2523,6 +2524,7 @@ def cmd_init(args):
         _git(["add", "-A"])
         rc, _ = _git(["commit", "-qm", "study data"])
         if rc != 0:
+            ok = False
             print(f"{YEL}first commit failed. Set git user.name and user.email, then: "
                   f"git -C {DATA} commit -m 'study data'{RST}")
     if not os.environ.get("STUDY_DATA") and not os.path.exists(CONF_FILE):
@@ -2530,7 +2532,7 @@ def cmd_init(args):
         with open(CONF_FILE, "w", encoding="utf-8") as f:
             f.write(f'data = "{DATA}"\nauto_update = true\n')
     print(f"{GRN}✓ data repo at {DATA}{RST}. Put banks in banks/<name>/tests.md.")
-    return 0
+    return 0 if ok else 1
 
 
 def cmd_sync(pull_code=False):
@@ -2603,7 +2605,10 @@ def cmd_sync(pull_code=False):
         return held
     rc, _ = _git(["pull", "--rebase", "--autostash"])
     if rc != 0:
-        print(f"{RED}pull failed (rc {rc}) - resolve by hand, then re-run.{RST}")
+        if _git(["ls-remote", "-q", "origin", "HEAD"], capture=True)[0] != 0:
+            print(f"{YEL}remote unreachable - progress is committed locally, re-run sync when online{RST}")
+        else:
+            print(f"{RED}pull failed (rc {rc}) - resolve by hand, then re-run.{RST}")
         return rc
     rc, _ = _git(["push", "origin", "HEAD"])
     if rc == 0:
