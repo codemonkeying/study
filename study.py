@@ -372,6 +372,10 @@ def parse_bank(path, keep_empty=False):
             continue
 
         nm = note_re.match(line)
+        # an unindented '- **summary**' bullet is a section key fact, not
+        # the last question's note (it used to overwrite that note)
+        if nm and line.startswith("- **") and cur_q is not None and cur_q["note"]:
+            continue
         if nm and cur_q is not None and "[" not in line:
             cur_q["note"] = nm.group(1).strip()
             continue
