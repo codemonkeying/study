@@ -1388,7 +1388,7 @@ def _ask_mc(q, i, total, shuffle, missed, done, score):
     if skipped:
         print(f"  {GRY}skipped - correct: {ans_txt}{RST}")
         if q["note"]:
-            print(f"  {GRY}› {expand_note(q['note'])}{RST}")
+            print(f"  {GRY}› {expand_note(q['note'], q)}{RST}")
         print()
         return None, False, done, score
     done += 1
@@ -1559,7 +1559,7 @@ def run(session, qs, test_num_of, title, shuffle=False, weak_only=False,
                 if skipped:
                     print(f"  {GRY}skipped{RST}")
                     if q["note"]:
-                        print(f"  {GRY}› {expand_note(q['note'])}{RST}")
+                        print(f"  {GRY}› {expand_note(q['note'], q)}{RST}")
                     print()
                     tick()
                     checkpoint(i)
@@ -1581,7 +1581,7 @@ def run(session, qs, test_num_of, title, shuffle=False, weak_only=False,
                 if skipped:
                     print(f"  {GRY}skipped - answer: {want}{RST}")
                     if q["note"]:
-                        print(f"  {GRY}› {expand_note(q['note'])}{RST}")
+                        print(f"  {GRY}› {expand_note(q['note'], q)}{RST}")
                     print()
                     tick()
                     checkpoint(i)
@@ -1604,7 +1604,7 @@ def run(session, qs, test_num_of, title, shuffle=False, weak_only=False,
                     continue
 
             if q["note"]:
-                print(f"  {GRY}› {expand_note(q['note'])}{RST}")
+                print(f"  {GRY}› {expand_note(q['note'], q)}{RST}")
             print()
             # stats key on the ORIGINAL question (relabelled text would hash
             # to a new id and orphan the stats)
@@ -1689,14 +1689,14 @@ def run(session, qs, test_num_of, title, shuffle=False, weak_only=False,
                         if not ok:
                             print(f"      {RED}you:{RST} {ans or '-'}   "
                                   f"{GRN}answer:{RST} {part_answer(pt)}")
-                    print(f"   {GRY}why:{RST} {expand_note(q['note'])}")
+                    print(f"   {GRY}why:{RST} {expand_note(q['note'], q)}")
                     continue
                 if "typed" in m:
                     print(f"   {RED}you:{RST}    {m['typed']}")
                     print(f"   {GRN}answer:{RST} {q['typed'][0]}"
                           + (f"  {GRY}(also: {' | '.join(q['typed'][1:])}){RST}"
                              if len(q['typed']) > 1 else ""))
-                    print(f"   {GRY}why:{RST} {expand_note(q['note'])}")
+                    print(f"   {GRY}why:{RST} {expand_note(q['note'], q)}")
                     continue
                 for j, (text, is_c) in enumerate(m["opts"]):
                     L = LETTERS[j]
@@ -1712,7 +1712,7 @@ def run(session, qs, test_num_of, title, shuffle=False, weak_only=False,
                     col = GRN if is_c else (RED if chose else GRY)
                     print(f"   {col}{L}) {text}{RST}  {mark}")
                 why = q["note"] or "(no explanation captured - add a *note* line in the bank)"
-                print(f"   {GRY}why:{RST} {expand_note(why)}")
+                print(f"   {GRY}why:{RST} {expand_note(why, q)}")
             print(f"\n{GRY}Tip: re-drill weak spots with  study {session} weak{RST}")
         elif not missed:
             print(f"\n{GRN}Clean sweep - no misses to review.{RST}")
@@ -2170,12 +2170,29 @@ def acronyms(session):
     return _ACRO[session]
 
 
-def expand_note(note):
+def expand_note(note, q=None):
     """Expand each glossary acronym in a note at its first mention, unless
-    the note already expands it ('X (...)')."""
+    the note already expands it ('X (...)'). With q, acronyms that appear
+    only in the stem/options/parts are appended as 'X = expansion'."""
     d = acronyms(REF_SESSION) if REF_SESSION else {}
     if not note or not d:
         return note
+    out = _expand(note, d)
+    if q:
+        txt = " ".join([q.get("q", "")] + [str(o[0]) for o in q.get("options", [])]
+                       + [f"{p['prompt']} {p['opts']}" for p in q.get("parts", [])])
+        extra = []
+        for w in re.findall(r"(?<![\w/-])[A-Za-z0-9][A-Za-z0-9+-]*[A-Za-z0-9](?![\w-])", txt):
+            k = w if w in d else (w[:-1] if w.endswith("s") and w[:-1] in d else None)
+            if (k and k not in extra and re.search(r"[A-Z].*[A-Z]|[A-Z].*\d", k)
+                    and not re.search(rf"(?<![\w/-]){re.escape(k)}s?(?![\w-])", note)):
+                extra.append(k)
+        if extra:
+            out += "  [" + " · ".join(f"{k} = {d[k]}" for k in extra) + "]"
+    return out
+
+
+def _expand(note, d):
     seen = set()
 
     def sub(m):
