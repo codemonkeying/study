@@ -881,9 +881,17 @@ class Quit(Exception):
     """Raised by ask() on /exit - ends a run but still saves it."""
 
 
-def show_stem(stem):
+def part_item(prompt):
+    """'Incident 2 actor' / 'Control 3 (...)' -> 2 / 3: the numbered stem
+    item a PBQ part is about, or None."""
+    m = re.match(r"[A-Z][a-z]+ (\d+)\b", prompt)
+    return m.group(1) if m else None
+
+
+def show_stem(stem, hl=None):
     """A stem may embed command output: '¶' = newline, shown as an
-    indented block (grey) so ipconfig/show output reads like a terminal."""
+    indented block (grey) so ipconfig/show output reads like a terminal.
+    hl = item number to highlight (the line starting with that number)."""
     if "¶" not in stem:
         return stem
     head, *body = stem.split("¶")
@@ -895,7 +903,11 @@ def show_stem(stem):
                     re.findall(r"([A-J]) (.+?)(?= · [A-J] |$)", ln.strip())]
         else:
             out.append(ln)
-    block = "\n".join(f"      {ln.rstrip()}" for ln in out)
+    def fmt(ln):
+        if hl and re.match(rf"\s*{hl}\s", ln):
+            return f"   {YEL}▶{RST}  {YEL}{ln.strip()}{RST}"
+        return f"      {ln.rstrip()}"
+    block = "\n".join(fmt(ln) for ln in out)
     return f"{head.rstrip()}\n{block}"
 
 
@@ -1267,14 +1279,14 @@ def part_answer(pt):
 def ask_parts(q, idx, total):
     """Multi-part PBQ: show the scenario once, ask each part in turn.
     Returns ([(part, answer, ok)], skipped)."""
-    print(f"Q{idx}/{total}. {show_stem(q['q'])}")
+    print(f"Q{idx}/{total}. {show_stem(q['q'], part_item(q['parts'][0]['prompt']))}")
     n = len(q["parts"])
     print(f"   {GRY}({n} parts, each scored · /skip skips the rest){RST}")
     res = []
     for j, pt in enumerate(q["parts"], 1):
         if j > 1 and q["q"].count("¶") >= 3:   # diagram/table: re-show it
             print(f"\n   {GRY}{'─' * 50}{RST}")
-            print(f"   {show_stem(q['q'])}")
+            print(f"   {show_stem(q['q'], part_item(pt['prompt']))}")
         print(f"\n   {CYN}Part {j}/{n}.{RST} {pt['prompt']}")
         if pt["opts"]:
             pt = shuffle_part(pt)   # fresh option order each run
