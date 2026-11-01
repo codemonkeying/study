@@ -211,7 +211,7 @@
    - @1.4.escrow
 4. The security team agrees to key escrow but worries that a single rogue administrator at the custodian could pull out any key. Which control BEST addresses that concern?
    - **[x] Dual control: two custodians must jointly approve each release**  - [ ] Encrypt every escrowed key under the custodian's master key  - [ ] Send every key release to the custodian's SIEM for review  - [ ] Rotate all escrowed keys every 90 days
-   - *Dual control, also called split knowledge or M of N, means no single person can release a key alone, which directly stops one rogue administrator. Logging releases to a SIEM is tempting, but it is detective: it tells you after the key has gone. A master key held by the same custodian still lets that admin decrypt everything, and rotation only shortens how long a stolen key stays useful. Hook: two keys to open the vault.*
+   - *Dual control (often implemented as M of N) means no single person can release a key alone, which directly stops one rogue administrator. Logging releases to a SIEM is tempting, but it is detective: it tells you after the key has gone. Do not confuse it with split knowledge, where each person holds only part of the key. A master key held by the same custodian still lets that admin decrypt everything, and rotation only shortens how long a stolen key stays useful. Hook: two keys to open the vault.*
    - @1.4.escrow
 5. Sales reps regularly leave laptops in taxis. Whoever picks one up must not be able to read anything from it, not even cached data or the swap file the OS wrote on its own. Which encryption level fits BEST?
    - **[x] Full-disk encryption**  - [ ] File-level encryption of the Documents folder  - [ ] Database encryption  - [ ] Transport encryption with TLS
@@ -469,7 +469,7 @@
 19. Over three nights, NetFlow shows 40 GB of design files leaving an aerospace firm to an overseas host. No ransom, leak or public claim follows. Which motivation is MOST likely?
     - **[x] Data exfiltration for espionage**  - [ ] Data exfiltration for financial gain  - [ ] Data exfiltration for blackmail  - [ ] Data exfiltration for revenge
     - *Large quiet transfers of design data with no follow-up point to espionage: the thief wants to use the information, not monetise or publicise it. Financial gain is tempting, but criminals usually demand payment or sell visibly, and nothing followed. Blackmail requires a threat, and revenge actors want visible harm. Hook: the data left and went silent.*
-    - @2.1.motivdisrupt
+    - @2.1.motiv
 20. An intel report describes a state-sponsored group that has kept hidden footholds in several ministries for years, quietly returning whenever it is cleaned out. What term BEST describes this kind of threat?
     - **[x] Advanced persistent threat (APT)**  - [ ] Insider threat  - [ ] Hacktivist campaign  - [ ] Unskilled attacker
     - *APT = a well-funded, skilled actor (usually a nation-state) that gets in, stays hidden and keeps coming back over a long period. Insiders already belong to the organisation; hacktivists want attention; unskilled attackers lack the skill to stay hidden. Hook: advanced tools, persistent presence.*
@@ -526,7 +526,7 @@
    - @2.2.unsupported
 9. A sales rep in a coffee shop joins a network called "Free_Cafe_WiFi" and gets a certificate warning when opening the CRM. Which vector is MOST relevant and what is the BEST protection?
    - **[x] Unsecure network; always-on VPN**  - [ ] Watering hole; DNS filtering on the laptop  - [ ] Typosquatting; registering look-alike CRM domains  - [ ] Unsupported system; updating the laptop's browser
-   - *An untrusted hotspot that triggers a certificate warning suggests an on-path attacker, and an always-on VPN encrypts traffic whatever network carries it. Watering hole is tempting, but nothing suggests a trusted site was compromised. The CRM domain was typed correctly, and an up-to-date browser still shows the warning because the threat is the network. Hook: treat every public network as hostile.*
+   - *An untrusted hotspot that triggers a certificate warning suggests an on-path attacker, and an always-on VPN encrypts traffic whatever network carries it. Watering hole is tempting, but nothing suggests a trusted site was compromised. Typosquatting needs a mistyped domain, which nothing here suggests, and an up-to-date browser still shows the warning because the threat is the network. Hook: treat every public network as hostile.*
    - @2.2.network
 10. At a conference, an engineer sees contact cards and files appearing on meeting-room laptops unprompted. The source is a phone a few metres away that is not on the venue Wi-Fi. Which vector should be reduced FIRST?
     - **[x] Bluetooth, by turning off discoverable mode**  - [ ] Wi-Fi, by enabling WPA3 on the room access point  - [ ] NFC, by disabling tap-to-share on the laptops  - [ ] Wired, by enabling 802.1X on the room's ports
@@ -536,7 +536,7 @@
     - **[x] Unsecure wired network; 802.1X and disabling unused ports**  - [ ] Rogue access point; wireless intrusion prevention  - [ ] Removable device; endpoint device control  - [ ] Default credentials; changing switch admin passwords
     - *Any port that hands out access is an unsecure wired network, and 802.1X makes a device authenticate before the port forwards traffic, while unused ports should be off. Rogue access point is tempting because the device could broadcast Wi-Fi later, but the entry here is the wired jack. Device control only governs what plugs into endpoints, and nobody logged into the switch. Hook: a live jack in an empty room is an open door.*
     - @2.2.network
-12. An external scan shows TCP 3389 (RDP) and 23 (Telnet) open on a branch router's public IP 203.0.113.40. What is the BEST action?
+12. An external scan shows TCP 3389 (RDP) and 23 (Telnet) forwarded through a branch router's public IP 203.0.113.40. What is the BEST action?
     - **[x] Remove public RDP and Telnet and require VPN for remote admin**  - [ ] Move RDP and Telnet to non-standard high ports  - [ ] Put an IPS in front of the router's public interface  - [ ] Enforce strong passwords and lockout on both services
     - *Open service ports widen the attack surface, so close what is not needed and gate admin access behind a VPN. Strong passwords are tempting, but Telnet still sends them in cleartext and RDP stays exposed to its own exploits. Changing ports is obscurity that scanners defeat, and an IPS only catches known patterns against services that should not be public. Hook: every open port is an unlocked window.*
     - @2.2.ports
@@ -993,7 +993,7 @@
     - **[x] A host-based firewall**  - [ ] A host-based IDS  - [ ] Full-disk encryption  - [ ] An application allow list
     - *A host-based firewall filters traffic at the endpoint and denies unsolicited connections even on untrusted networks. A HIDS is tempting, but it detects and alerts rather than blocking the connection; FDE protects data at rest only. Hook: carry your own wall.*
     - @2.5.hostfw
-24. Forensics shows a trusted Windows service process loaded a malicious module from disk at runtime, so the attacker's code ran under the service's name. Which attack is this?
+24. Forensics shows a trusted Windows service process was forced by another process to load a malicious library into its memory at runtime, so the attacker's code ran under the service's name. Which attack is this?
     - **[x] DLL injection**  - [ ] Privilege escalation  - [ ] Buffer overflow  - [ ] Trojan
     - *Forcing a running process to load a malicious library is DLL injection, a form of memory injection that hides behind a trusted process. A trojan is tempting because malicious code hides in something trusted, but a trojan is software the user installs believing it is legitimate. Hook: a stowaway library in a trusted ship.*
     - @2.4.inject
@@ -1079,7 +1079,7 @@
     - **[x] VM escape**  - [ ] Resource reuse  - [ ] Privilege escalation  - [ ] VM sprawl
     - *Moving from a guest to the hypervisor and on to other guests is VM escape, the worst virtualization failure. Resource reuse is tempting because other tenants' data is read, but reuse leaks leftovers through reallocated memory or disk without breaking out. Hook: the prisoner walks into the warden's office.*
     - @3.1.virt
-16. An audit finds 60 test VMs nobody owns, many unpatched and still on the production network. What is the BEST control?
+16. Developers can create VMs from a self-service portal with no owner field and no expiry date, and the hypervisor now hosts hundreds of idle, unpatched VMs. What is the BEST control?
     - **[x] A VM lifecycle process tied to the asset inventory**  - [ ] Monthly vulnerability scans of the hypervisor  - [ ] Moving the VMs onto a separate VLAN  - [ ] Converting the VMs into containers
     - *VM sprawl is fixed with lifecycle management: owners, inventory and expiry so unused VMs are removed. Moving them to a VLAN is tempting, but it hides the problem while the unowned VMs stay unpatched. Hook: you cannot secure what you forgot you had.*
     - @3.1.virt
@@ -1158,7 +1158,7 @@
     - **[x] Ease of recovery**  - [ ] Risk transference  - [ ] Power  - [ ] Data sovereignty
     - *Ease of recovery = how fast and simply you get back after failure. Templated rebuilds win. The others do not describe rebuild speed.*
     - @3.1.recov
-14. Remote battery-backed field sensors began failing weeks early after a firmware update added AES-256 to every message. Which considerations is the team MOST trading off?
+14. Remote battery-backed field sensors began failing weeks early after a firmware update added AES-256 to every message. Which considerations are the team MOST trading off?
     - **[x] Power and compute against security**  - [ ] Responsiveness against scalability  - [ ] Ease of deployment against cost  - [ ] Availability against risk transference
     - *Heavier encryption consumes CPU cycles and battery on constrained devices, so power and compute are traded against security, usually solved with lightweight crypto. Availability is tempting because sensors go down, but the root cause is resource limits, and risk transference is contractual. The other pairs are not about device resources. Hook: every cipher costs battery.*
     - @3.1.power
@@ -1365,7 +1365,7 @@
     - @3.3.geo
 16. An auditor asks how a company stops a stolen backup tape from being readable. Which method is the BEST answer?
     - **[x] Encryption with keys stored separately**  - [ ] Tokenization of sensitive fields  - [ ] Hashing of the backup files  - [ ] Masking of account numbers
-    - *Encryption makes the whole tape unreadable without a key held elsewhere. Tokenization is tempting, but it only replaces selected fields, leaving the rest readable. Hashing makes the data unrestorable, and masking only hides values on display. Hook: lock the whole box, not a few items.*
+    - *Encryption makes the whole tape unreadable without a key held elsewhere. Tokenization is tempting, but it only replaces selected fields, leaving the rest readable. Hashing only produces a fingerprint and leaves the tape readable, and masking only hides values on display. Hook: lock the whole box, not a few items.*
     - @3.3.enc
 17. A firm keeps HR records on a separate database server on its own network segment, reachable only from the HR application. Which data protection method is this?
     - **[x] Segmentation**  - [ ] Tokenization  - [ ] Obfuscation  - [ ] Hashing
@@ -1527,7 +1527,7 @@
    - @4.1.hardics
 5. A medical pump vendor uses a real-time operating system (RTOS) on its devices. Why is hardening an RTOS-based device MORE difficult than hardening a laptop?
    - **[x] Tight timing and resource limits rule out agents and frequent patches**  - [ ] Its firmware is code-signed, so it can never be modified  - [ ] It lacks a network stack, so it cannot be scanned  - [ ] It fails closed whenever any patch is applied
-   - *An RTOS must meet strict deadlines on small CPUs and memory, so agents and frequent patches can break timing; rely on vendor updates, segmentation and disabling unused features. Code signing is tempting, but it controls who may update firmware, not whether updates are possible. Many RTOS devices are networked, and fail-closed is a network device behaviour. Hook: timing is the product.*
+   - *An RTOS must meet strict deadlines on small CPUs and memory, so agents and frequent patches can break timing; rely on vendor updates, segmentation and disabling unused features. Code signing is tempting, but it controls who may update firmware, not whether updates are possible. Many RTOS devices are networked, and fail-closed describes what a control does when it fails, not a hardening step. Hook: timing is the product.*
    - @4.1.hardiot
 6. A hotel installs 200 smart TVs and thermostats. Which TWO actions BEST harden these IoT devices? (Select 2)
    - **[x] Change default passwords and keep firmware updated**  - **[x] Place them on a separate VLAN from guest and staff systems**  - [ ] Install endpoint antivirus on each device  - [ ] Hide the SSID that the devices connect to
@@ -1535,7 +1535,7 @@
    - @4.1.hardiot
 7. A start-up's cloud account was set up quickly. Which hardening action gives the BIGGEST reduction in risk to the cloud infrastructure?
    - **[x] Enforce MFA on root and admin accounts and remove unused access keys**  - [ ] Encrypt every storage bucket with provider-managed keys  - [ ] Put a web application firewall on all public endpoints  - [ ] Replicate all workloads to a second region for resilience
-   - *Cloud breaches mostly start with compromised identities, so MFA on privileged accounts and removing stale keys cuts risk the most. Provider-managed encryption is tempting, but a stolen admin key can still read the data. A WAF protects only web apps, and a second region adds availability, not security. Hook: in the cloud, identity is the perimeter.*
+   - *Cloud breaches mostly start with compromised identities, so MFA on privileged accounts and removing stale keys cuts risk the most. Provider-managed encryption is tempting, but a stolen admin key can still read the data. A WAF protects only web apps, and a second region improves availability but does nothing about the stolen-credential risk. Hook: in the cloud, identity is the perimeter.*
    - @4.1.hardcloud
 8. A new file server is built from a standard image. Which change BEST hardens it as a server and also benefits a workstation build?
    - **[x] Remove unneeded services and enable a host-based firewall**  - [ ] Move the server into the screened subnet  - [ ] Apply data masking to all shared files  - [ ] Configure it as the jump server for admins
@@ -1807,9 +1807,9 @@
     - **[x] Rescan and monitor for repeat alerts before release**  - [ ] Release it once the cleanup ticket is closed  - [ ] Tune the rule that fired to stop repeat alerts  - [ ] Reimage it and release it with no further checks
     - *Validation confirms the threat is gone through rescans and monitoring before the system returns to the network. Closing the ticket is tempting, but it only records that work was done, not that it worked. Hook: validate, then release.*
     - @4.4.resp
-18. A cloud team extends monitoring to load balancers, virtual networks and identity services, beyond its VMs. Which resource category is it adding?
+18. A cloud team extends monitoring to load balancers, virtual networks and DNS, beyond its VMs. Which resource category is it adding?
     - **[x] Infrastructure**  - [ ] Applications  - [ ] Systems  - [ ] Endpoints
-    - *Infrastructure covers network and platform components such as load balancers, routers, VPCs and identity services. Applications is tempting because these are cloud services, but that category means software and its logs, not the underlying platform. Hook: systems = hosts, applications = software, infrastructure = the plumbing.*
+    - *Infrastructure covers network and platform components such as load balancers, routers, VPCs and DNS. Applications is tempting because these are cloud services, but that category means software and its logs, not the underlying platform. Hook: systems = hosts, applications = software, infrastructure = the plumbing.*
     - @4.4.res
 19. Why does 4.4 list vulnerability scanning as an ongoing MONITORING activity rather than a one-time test?
     - **[x] New CVEs and configuration drift appear constantly**  - [ ] Scans supply the log data that the SIEM correlates  - [ ] Continuous scans block exploits as they occur  - [ ] Auditors require scans to be run at least daily
@@ -2038,8 +2038,8 @@
     - **[x] Short-lived tokens with narrow scopes**  - [ ] Signing tokens with a stronger algorithm  - [ ] Long-lived refresh tokens for convenience  - [ ] Encrypting stored tokens on the server
     - *Short expiry and narrow scopes mean a stolen token works briefly and only for limited actions. Stronger signing is tempting, but it prevents forgery, not misuse of a genuine stolen token. Hook: small keys that expire fast.*
     - @4.6.oauth
-22. An auditor asks how a contractor obtained access to the payments system. The company produces the ticket, the manager's sign-off and the date access was granted. Which provisioning practice does this show?
-    - **[x] A documented access request and approval workflow**  - [ ] Attestation of the contractor's access  - [ ] Identity proofing of the contractor  - [ ] Role-based access control
+22. An auditor asks how a contractor obtained access to the payments system. The company produces records showing who asked for the access, who agreed to it and when it was granted. Which provisioning practice does this show?
+    - **[x] A documented access request and approval workflow**  - [ ] Attestation of the contractor's access  - [ ] Identity proofing of the contractor  - [ ] Periodic access review
     - *Good provisioning records who requested access, who approved it and what was granted, making access justified and auditable. Attestation is tempting because a manager signs off, but attestation is a periodic recertification of existing access, not the original approval. Hook: approval at the door, attestation on the rounds.*
     - @4.6.prov
 23. A shared "scanner" service account has write rights to every file share. Which change BEST reflects least privilege?
@@ -2295,7 +2295,7 @@
    - @4.8.ir
 
 30. PBQ 4.9 - Data sources. For each question, pick the BEST source.
-    - [p] Did the sensor drop the SQL injection attempt or just raise an alert :: A IPS/IDS logs · B Endpoint logs · C Network logs · D Vulnerability scans · E Dashboards · F Firewall logs · G Automated reports = a
+    - [p] Was the SQL injection attempt dropped or just raise an alert :: A IPS/IDS logs · B Endpoint logs · C Network logs · D Vulnerability scans · E Dashboards · F Firewall logs · G Automated reports = a
     - [p] Which parent process launched PowerShell on a finance workstation at 02:13 :: A IPS/IDS logs · B Endpoint logs · C Network logs · D Vulnerability scans · E Dashboards · F Firewall logs · G Automated reports = b
     - [p] Did the server's uplink lose connectivity at 02:15 :: A IPS/IDS logs · B Endpoint logs · C Network logs · D Vulnerability scans · E Dashboards · F Firewall logs · G Automated reports = c
     - [p] Was the exploited weakness already known on that host last month :: A IPS/IDS logs · B Endpoint logs · C Network logs · D Vulnerability scans · E Dashboards · F Firewall logs · G Automated reports = d
@@ -2356,8 +2356,8 @@
    - *A backout plan, along with a maintenance window and testing, must be ready before implementing so the change can be reversed if it fails. Updated documentation and diagrams are tempting because they are required too, but they are updated after the change is made. A review happens after implementation. Hook: know the way back before you go.*
    - @5.1.proc
 12. A US retailer opens its first store in Germany and must change how it handles employee personal data there. Which category of external consideration does the EU GDPR fall under in the SY0-701 objectives?
-   - **[x] Global**  - [ ] National  - [ ] Industry  - [ ] Local/regional
-   - *GDPR applies across many countries and to anyone handling EU residents' data, so the objectives treat it as a global consideration. National is tempting because the store is in Germany, but GDPR is not German law; it spans the whole EU and beyond. Industry rules come from sector bodies and local or regional rules from states or cities. Hook: many countries = global.*
+   - **[x] Global**  - [ ] National  - [ ] Industry  - [ ] Legal
+   - *GDPR applies across many countries and to anyone handling EU residents' data, so the objectives treat it as a global consideration. National is tempting because the store is in Germany, but GDPR is not German law; it spans the whole EU and beyond. Industry rules come from sector bodies, and legal is a separate external consideration about lawsuits and liability rather than where the rule applies. Hook: many countries = global.*
    - @5.1.ext
 13. A small online shop must follow strict card data rules, enforced through its merchant contract rather than by any law. Which external consideration is this?
    - **[x] Industry**  - [ ] Regulatory  - [ ] National  - [ ] Legal
@@ -2368,11 +2368,11 @@
    - *External legal and local requirements override internal policy, so the policy must be revised to meet them. A risk exception is tempting, but exceptions are internal approvals to deviate from your own policy; they cannot waive someone else's legal requirement. Insurance and internal acceptance do not make the vendor compliant. Hook: the law sets the floor.*
    - @5.1.ext
 15. A remote work policy written in 2019 has never been reviewed and does not mention personal devices or home Wi-Fi. What should governance require?
-   - **[x] Scheduled reviews plus reviews after major changes**  - [ ] Reviews only after an audit finding  - [ ] Reviews only after a security incident  - [ ] Review whenever a manager requests one
-   - *Policies need monitoring and revision on a schedule, often yearly, and also when laws, technology or incidents change. Review after an incident is tempting because incidents do trigger revisions, but relying only on that is reactive and leaves gaps like this one. Audit-only or manager-driven reviews are also ad hoc. Hook: service the car on schedule, not only after a breakdown.*
+   - **[x] Scheduled reviews plus reviews after major changes**  - [ ] Reviews triggered by audit findings  - [ ] Reviews triggered by security incidents  - [ ] Reviews at each manager's request
+   - *Policies need monitoring and revision on a schedule, often yearly, and also when laws, technology or incidents change. Review after an incident is tempting because incidents do trigger revisions, but on its own that is reactive and leaves gaps like this one. Audit-only or manager-driven reviews are also ad hoc. Hook: service the car on schedule, not only after a breakdown.*
    - @5.1.revise
 16. A post-breach review shows the incident response procedure has no legal hold step. What is the BEST governance action?
-   - **[x] Revise the procedure now with version control**  - [ ] Add a legal hold guideline  - [ ] Wait for the annual policy review  - [ ] Retrain staff on the current procedure
+   - **[x] Revise the procedure now with version control**  - [ ] Add a legal hold guideline  - [ ] Wait for the annual procedure review  - [ ] Retrain staff on the current procedure
    - *Lessons learned should trigger a prompt, tracked revision so everyone works from the corrected version. A guideline is tempting because it is quick, but guidelines are optional, so the legal hold step could still be skipped. Waiting leaves a known gap and retraining on the current version repeats it. Hook: fix the document, then train.*
    - @5.1.revise
 17. At a multinational, which governance body sets overall security direction and holds executives accountable on behalf of the owners?
@@ -2568,8 +2568,8 @@
    - **[x] A recent independent third-party assessment report**  - [ ] The vendor's completed security questionnaire  - [ ] The vendor's signed internal attestation  - [ ] A right-to-audit clause in the draft contract
    - *An independent third-party assessment is the strongest evidence because a neutral party tested the controls. The questionnaire is tempting but is self-reported and unverified, and a right-to-audit clause only grants a future right, it is not evidence today. Hook: trust, but verify with someone neutral.*
    - @5.3.vend
-2. A bank wants assurance that a vendor regularly checks its own access controls and fixes the gaps it finds, not just that the controls exist on paper. What should the bank request?
-   - **[x] Evidence of internal audits and remediation**  - [ ] The vendor's access control policy  - [ ] A signed MOA covering access  - [ ] A completed vendor questionnaire
+2. A bank wants assurance that a vendor can show its access controls are working in practice, not just documented. What should the bank request?
+   - **[x] Internal audit reports with remediation**  - [ ] The vendor's access control policy  - [ ] A signed MOA covering access  - [ ] A completed vendor questionnaire
    - *Evidence of internal audits and remediation shows the vendor actually tests its own controls and fixes findings. A policy is tempting but only says what should happen, not that anyone checks it. Hook: policy is the promise, audit evidence is the proof.*
    - @5.3.vend
 3. Before connecting a vendor's portal to its network, a manufacturer wants to see whether the portal can be broken into. Which assessment fits BEST, assuming the contract allows it?
@@ -2641,7 +2641,7 @@
    - *A standard questionnaire gathers control information cheaply at scale, and risky answers then trigger deeper checks. Requesting audit reports is tempting but most small suppliers will not have them, and a right-to-audit clause only creates a future right. Hook: survey wide, then dig deep.*
    - @5.3.quest
 20. A vendor answers yes to every control on a security questionnaire, including full disk encryption and MFA. What is the MAIN weakness of relying on this result?
-   - **[x] The answers are self-reported and unverified**  - [ ] Questionnaires do not cover technical controls  - [ ] It replaces the need for an SLA  - [ ] It is only valid for internal vendors
+   - **[x] The answers are self-reported and unverified**  - [ ] Questionnaires do not cover technical controls  - [ ] It cannot be used in contract negotiation  - [ ] It covers only the vendor's subcontractors
    - *Questionnaires rely on the vendor's honesty, so critical answers should be verified with evidence or audits. Saying they do not cover technical controls is tempting but wrong, since they routinely ask about encryption and MFA. Hook: a yes is not proof.*
    - @5.3.quest
 21. During an authorized bank pen test, a tester finds a vendor-hosted server that is not listed in scope but appears to belong to the bank's environment. What should the tester do?
@@ -2649,8 +2649,8 @@
    - *Rules of engagement limit testing to the agreed scope, and third-party assets need the owner's permission, so the tester stops and reports. A light scan is tempting but is still active testing of an unauthorized system. Hook: out of scope means hands off.*
    - @5.3.roe
 22. Which item belongs in the rules of engagement for a test of a vendor's system?
-   - **[x] Allowed testing hours and emergency contacts**  - [ ] The SLA uptime target  - [ ] Project deliverables and payment terms  - [ ] The confidentiality obligations of both parties
-   - *Rules of engagement define how the test runs: time windows, allowed techniques, contacts and stop conditions. The SLA uptime target is tempting but belongs in the service agreement; payment terms belong in the SOW and confidentiality in an NDA. Hook: RoE is the how, SOW is the what.*
+   - **[x] Allowed testing hours and emergency contacts**  - [ ] The SLA uptime target  - [ ] Project deliverables and payment terms  - [ ] The vendor's data retention schedule
+   - *Rules of engagement define how the test runs: time windows, allowed techniques, contacts and stop conditions. The SLA uptime target is tempting but belongs in the service agreement; payment terms belong in the SOW and data retention in the vendor's own policy. Hook: RoE is the how, SOW is the what.*
    - @5.3.roe
 23. A port authority and the coast guard put in writing that the port will feed camera logs nightly and the coast guard will review alerts within an hour. No money changes hands and it is not a commercial contract. Which agreement is this?
    - **[x] MOA**  - [ ] MOU  - [ ] SLA  - [ ] NDA
@@ -2778,14 +2778,14 @@
 - **Reporting: internal vs external. Non-compliance: fines, sanctions, reputational damage, loss of license, contractual impacts.**
 - **Monitoring: due diligence (research) vs due care (ongoing action), attestation and acknowledgement, internal and external, automation.**
 - **Privacy: local/regional, national, global laws; data subject; controller vs processor; ownership; data inventory and retention; right to be forgotten.**
-24. PBQ 5.4 - Compliance programme. Pick the best match for each situation. ¶  1  The board's audit committee reviews monthly compliance metrics ¶  2  The company files a breach notice with a government authority within 72 hours ¶  3  An authority orders the company to pay 2 million ¶  4  A medical board stops a hospital from operating ¶  5  An employee ticks a box confirming she read the new remote access policy ¶  6  The CFO signs a declaration to an insurer that MFA is in place
+24. PBQ 5.4 - Compliance programme. Pick the best match for each situation. ¶  1  The board's audit committee reviews monthly compliance metrics ¶  2  The company files a breach notice with a government authority within 72 hours ¶  3  An authority orders the company to pay 2 million ¶  4  A medical board revokes a hospital's licence ¶  5  An employee ticks a box confirming she read the new remote access policy ¶  6  The CFO signs a declaration to an insurer that MFA is in place
    - [p] Situation 1 :: A Internal reporting · B External reporting · C Acknowledgement · D Attestation = a
    - [p] Situation 2 :: A Internal reporting · B External reporting · C Acknowledgement · D Attestation = b
    - [p] Situation 3 :: A Fine · B Loss of license · C Contractual impact · D Sanctions = a
    - [p] Situation 4 :: A Fine · B Loss of license · C Contractual impact · D Sanctions = b
    - [p] Situation 5 :: A Internal reporting · B External reporting · C Acknowledgement · D Attestation = c
    - [p] Situation 6 :: A Internal reporting · B External reporting · C Acknowledgement · D Attestation = d
-   - *1: a board committee is inside the organization, so internal reporting. 2: notice to an authority is external reporting, not an attestation. 3: a money penalty is a fine; sanctions restrict activity. 4: losing the right to operate is loss of license, which is broader than a sanction. 5: confirming receipt of a policy is acknowledgement. 6: formally declaring controls are in place is attestation.*
+   - *1: a board committee is inside the organization, so internal reporting. 2: notice to an authority is external reporting, not an attestation. 3: a money penalty is a fine; sanctions restrict activity. 4: losing the right to operate is loss of license, because the licence itself is withdrawn. 5: confirming receipt of a policy is acknowledgement. 6: formally declaring controls are in place is attestation.*
    - @5.4.report
 
 25. PBQ 5.4 - Privacy request. A European customer asks a travel company to erase her data. The company uses a cloud CRM vendor. Answer each part.
